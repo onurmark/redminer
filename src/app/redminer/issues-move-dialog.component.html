@@ -1,0 +1,24 @@
+<mat-dialog-content>
+<form #f [formGroup]="formGroup" class="container">
+  <mat-form-field>
+    <label for="version">Move to Version</label>
+    <mat-select id="version"
+        formControlName="version">
+      <mat-option *ngFor="let version of versions"
+        [value]="version.id"
+        [disabled]="version.status !== 'open'">
+        {{ version.name }} - {{ version.status }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button
+    color="primary"
+    mat-dialog-close>Cancel</button>
+  <button mat-raised-button
+    color="primary"
+    [disabled]="f.pristine"
+    (click)="onMove()">Move</button>
+</mat-dialog-actions>

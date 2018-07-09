@@ -1,5 +1,48 @@
-<p>
-  redminer works!
+<ng-container>
+  <mat-toolbar color="primary" class="ab-header">
+    <a mat-button href="#">Redminer</a>
 
-  <button (click)="getProjects()">Get project list</button>
-</p>
+    <span class="ab-spacer"></span>
+
+    <form [formGroup]="formGroup">
+      <mat-form-field>
+        <label for="project">Project: </label>
+        <mat-select id="project"
+          formControlName="project">
+          <mat-option *ngFor="let project of projects" [value]="project">
+            {{ project.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-toolbar>
+  <mat-sidenav-container class="ab-sidebar-container" autosize>
+    <mat-sidenav mode="side" opened class="ab-sidenav"
+      [fixedInViewport]="false"
+      [fixedTopGap]="0"
+      [fixedBottomGap]="0">
+      <button mat-raised-button color="primary"
+        class="ab-sidenav-button"
+        (click)="onCreateNewVersion()">Create New Version</button>
+        <mat-form-field>
+          <input #filter matInput
+            placeholder="Search version">
+        </mat-form-field>
+      <mat-nav-list *ngFor="let version of versions | versionFilter:filter.value">
+        <button mat-button mat-list-item
+            class="ab-sidenav-button"
+            routerLink="version/{{version.id}}"
+            routerLinkActive="active">
+          <mat-icon (click)="onRemoveVersion($event, version)">
+            delete
+          </mat-icon>
+          {{ version.name }}
+        </button>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content class="ab-sidenav-content">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <mat-toolbar class="ab-footer">Footer</mat-toolbar>
+</ng-container>

@@ -1,0 +1,20 @@
+<mat-tab-group *ngIf="version">
+  <mat-tab label="Version">
+    <div class="ab-tab">
+      <app-version-detail [version]="version"></app-version-detail>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Issue">
+    <div class="ab-tab">
+      <app-issues [version]="version"></app-issues>
+    </div>
+  </mat-tab>
+  <mat-tab label="Build">
+    <div class="ab-tab">
+      <!--
+      <app-build></app-build>
+      -->
+    </div>
+  </mat-tab>
+</mat-tab-group>

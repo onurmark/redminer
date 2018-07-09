@@ -1,0 +1,43 @@
+<mat-dialog-content>
+  <h1>Create New Version</h1>
+  <form #f [formGroup]="versionForm" class="container">
+    <mat-form-field>
+      <input formControlName="name"
+        matInput placeholder="Name">
+    </mat-form-field>
+
+    <mat-form-field>
+      <textarea formControlName="description"
+        matInput placeholder="Description" rows="5"></textarea>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select formControlName="status" placeholder="status">
+        <mat-option value="open">open</mat-option>
+        <mat-option value="close">close</mat-option>
+        <mat-option value="locked">locked</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input formControlName="wiki_page_title"
+        matInput placeholder="WIKI pages">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select formControlName="sharing" placeholder="sharing">
+        <mat-option value="none">none</mat-option>
+        <mat-option value="descendants">하위프로젝트</mat-option>
+        <mat-option value="hierachy">상위 및 하위 프로젝트</mat-option>
+        <mat-option value="tree">최상위 및 모든 하위 프로젝트</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button
+    mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="primary"
+    [disabled]="f.pristine"
+    (click)="onCreate()">Create</button>
+</mat-dialog-actions>
