@@ -1,0 +1,32 @@
+
+.container {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+}
+
+.sidenav {
+  align-items: center;
+  justify-content: center;
+  width: 240px;
+  background-color: #fafafa;
+  padding: 20px;
+}
+
+.sidenav-button {
+  width: 100%;
+  text-align: left;
+}
+
+.sidenav-content {
+  padding: 20px;
+}
+
+
+.active {
+  color: white;
+  background-color: blue;
+}
+

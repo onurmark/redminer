@@ -35,6 +35,16 @@ export class RedmineService {
     httpOptions.headers = httpOptions.headers.set('X-Redmine-API-Key', REDMINE_API_KEY);
   }
 
+  getProject(id: number) : Observable<Project> {
+    const url = `${this.apiUrl}/projects/${id}.json`;
+    return this.http.get<Project>(url, httpOptions).pipe(
+      map((response) => {
+        console.log(response);
+        return response['project'];
+      })
+    );
+  }
+
   getProjectList(): Observable<Project[]> {
     const url = `${this.apiUrl}/projects.json?limit=1000`;
     return this.http.get(url, httpOptions).pipe(map(response => {

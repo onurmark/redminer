@@ -2,12 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { RedminerComponent } from './redminer/redminer.component';
-import { OverViewComponent } from './redminer/overview.component';
 import { RedminerEventComponent } from './redminer/redminer-event.component';
 import { RedminerPopupComponent } from './redminer/redminer-popup.component';
+import { VersionListComponent } from './redminer/version-list.component';
 import { VersionComponent } from './redminer/version.component';
+import { TimelineComponent } from './redminer/timeline.component';
+import { ProjectResolver } from './project.resolver';
 import { VersionResolver } from './version.resolver';
-
 
 const routes: Routes = [
   { path: '', redirectTo: '/redminer', pathMatch: 'full' },
@@ -16,12 +17,22 @@ const routes: Routes = [
     component: RedminerComponent,
     children: [
       {
-        path: 'version/:id',
-        component: VersionComponent,
+        path: 'project/:id',
+        component: VersionListComponent,
         resolve: {
-          version: VersionResolver,
-        }
+          project: ProjectResolver
+        },
+        children: [
+          {
+            path: 'version/:versionId',
+            component: VersionComponent,
+            resolve: {
+              version: VersionResolver,
+            }
+          }
+        ]
       },
+      { path: 'timeline', component: TimelineComponent },
     ],
     runGuardsAndResolvers: 'always'
   },

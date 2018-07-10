@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Version } from '../version';
 
@@ -9,7 +10,7 @@ import { Version } from '../version';
 })
 export class VersionComponent implements OnInit, OnDestroy {
   version: Version;
-  subscription;
+  subscription: Subscription;
 
   constructor(
     private router: Router,
@@ -30,6 +31,6 @@ export class VersionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.subscription();
+    this.subscription.unsubscribe();
   }
 }

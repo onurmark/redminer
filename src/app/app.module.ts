@@ -26,19 +26,22 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
-import { RedminerComponent, VersionFilterPipe } from './redminer/redminer.component';
+import { RedminerComponent } from './redminer/redminer.component';
 import { RedminerPopupComponent } from './redminer/redminer-popup.component';
 import { RedminerEventComponent } from './redminer/redminer-event.component';
 
 import { RedmineInjectables } from './redmine.injectable';
 import { VersionComponent } from './redminer/version.component';
 
+import { ProjectResolver } from './project.resolver';
 import { VersionResolver } from './version.resolver';
 import { VersionDetailComponent } from './redminer/version-detail.component';
 import { IssuesComponent } from './redminer/issues.component';
 import { IssuesMoveDialogComponent } from './redminer/issues-move-dialog.component';
 import { VersionCreateDialogComponent } from './redminer/version-create-dialog.component';
 import { OverviewComponent } from './redminer/overview.component';
+import { VersionListComponent, VersionFilterPipe } from './redminer/version-list.component';
+import { TimelineComponent } from './redminer/timeline.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +55,9 @@ import { OverviewComponent } from './redminer/overview.component';
     IssuesComponent,
     IssuesMoveDialogComponent,
     VersionCreateDialogComponent,
-    OverviewComponent
+    OverviewComponent,
+    VersionListComponent,
+    TimelineComponent
   ],
   imports: [
     BrowserModule,
@@ -89,6 +94,7 @@ import { OverviewComponent } from './redminer/overview.component';
   ],
   providers: [
     RedmineInjectables,
+    ProjectResolver,
     VersionResolver,
   ],
   bootstrap: [AppComponent]
