@@ -17,16 +17,16 @@
 
 .sidenav-button {
   width: 100%;
-  text-align: left;
+  text-align: center;
+  margin-bottom: 5px;
 }
 
 .sidenav-content {
   padding: 20px;
 }
 
-
 .active {
-  color: white;
-  background-color: blue;
+  background-color: #dcdcdc;
+  font-weight: bold;
 }
 

@@ -7,13 +7,13 @@ import { MatDialog } from '@angular/material';
 import { MatPaginator, MatSort } from '@angular/material';
 
 import { BehaviorSubject, merge, Observable, of as ObservableOf } from 'rxjs';
-import { catchError, map, tap, startWith, switchMap } from 'rxjs/operators';
+import { catchError, finalize, map, tap, startWith, switchMap } from 'rxjs/operators';
 
 import { RedmineService } from '../redmine.service';
 
 import { Project } from '../project';
 import { Version } from '../version';
-import { Issue } from '../issue';
+import { Issue, IssueStatus } from '../issue';
 
 import { IssuesMoveDialogComponent } from './issues-move-dialog.component';
 
@@ -32,6 +32,7 @@ export class IssuesComponent implements AfterViewInit, OnInit, OnChanges {
   @ViewChild(MatSort) sort: MatSort;
 
   issueStatus: string = '*';
+  issueStatuses: IssueStatus[];
   selection: SelectionModel<Issue>;
 
   change: EventEmitter<any> = new EventEmitter();
@@ -48,18 +49,22 @@ export class IssuesComponent implements AfterViewInit, OnInit, OnChanges {
     this.issueDataSource = new IssueDataSource(this.redmineService);
   }
 
-
   ngOnInit() {
+    this.redmineService.getIssueStatuses().subscribe(issueStatuses => {
+      this.issueStatuses = issueStatuses;
+      this.change.emit();
+    });
   }
 
   ngOnChanges() {
     this.paginator.pageIndex = 0;
-
     this.change.emit();
   }
 
-  onChangeStatus(): void {
-    this.reloadIssues();
+  onChangeIssueStatus(status): void {
+    this.paginator.pageIndex = 0;
+    this.issueStatus = status;
+    this.change.emit();
   }
 
   ngAfterViewInit() {
@@ -67,18 +72,7 @@ export class IssuesComponent implements AfterViewInit, OnInit, OnChanges {
 
     merge(this.sort.sortChange, this.paginator.page, this.change).pipe(
       tap(() => {
-        const order = this.sort.direction === 'asc' ? this.sort.active : `${this.sort.active}:desc`;
-
-        this.issueDataSource.loadIssues(
-          this.version.project.id,
-          this.version.id,
-          this.issueStatus,
-          order,
-          this.paginator.pageIndex * this.paginator.pageSize,
-          this.paginator.pageSize
-        )
-
-        this.selection.clear();
+        this.reloadIssues();
       })
     ).subscribe();
   }
@@ -134,6 +128,9 @@ export class IssuesComponent implements AfterViewInit, OnInit, OnChanges {
 
 export class IssueDataSource implements DataSource<Issue> {
   private issueSubject = new BehaviorSubject<Issue[]>([]);
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+
+  loading$ = this.loadingSubject.asObservable();
 
   paginator: MatPaginator;
   sort: MatSort;
@@ -151,21 +148,25 @@ export class IssueDataSource implements DataSource<Issue> {
 
   disconnect(collectionViewer: CollectionViewer): void {
     this.issueSubject.complete();
+    this.loadingSubject.complete();
   }
 
   loadIssues(project_id: number, version_id: number, status='*', sort='', offset=0, pageSize=25) {
-    this.redmineService!.getIssues(
+    this.loadingSubject.next(true);
+    this.redmineService.getIssues(
       project_id,
       version_id,
       status,
       sort,
       offset,
-      pageSize).subscribe(response => {
+      pageSize).pipe(
+        catchError(() => ObservableOf([])),
+        finalize(() => this.loadingSubject.next(false))
+      ).subscribe(response => {
         console.log('response: ', response);
         this.issueSubject.next(response['issues']);
         this.data = response['issues'];
         this.totalCount = response.total_count;
       });
   }
-
 }

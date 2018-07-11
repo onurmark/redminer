@@ -36,7 +36,8 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button
-    mat-dialog-close>Cancel</button>
+    mat-dialog-close
+    (click)="onCancel()">Cancel</button>
   <button mat-raised-button color="primary"
     [disabled]="f.pristine"
     (click)="onCreate()">Create</button>

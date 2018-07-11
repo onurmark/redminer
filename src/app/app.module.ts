@@ -34,14 +34,13 @@ import { RedmineInjectables } from './redmine.injectable';
 import { VersionComponent } from './redminer/version.component';
 
 import { ProjectResolver } from './project.resolver';
-import { VersionResolver } from './version.resolver';
-import { VersionDetailComponent } from './redminer/version-detail.component';
 import { IssuesComponent } from './redminer/issues.component';
 import { IssuesMoveDialogComponent } from './redminer/issues-move-dialog.component';
 import { VersionCreateDialogComponent } from './redminer/version-create-dialog.component';
 import { OverviewComponent } from './redminer/overview.component';
 import { VersionListComponent, VersionFilterPipe } from './redminer/version-list.component';
 import { TimelineComponent } from './redminer/timeline.component';
+import { OptionsComponent } from './redminer/options.component';
 
 @NgModule({
   declarations: [
@@ -51,13 +50,13 @@ import { TimelineComponent } from './redminer/timeline.component';
     RedminerPopupComponent,
     RedminerEventComponent,
     VersionComponent,
-    VersionDetailComponent,
     IssuesComponent,
     IssuesMoveDialogComponent,
     VersionCreateDialogComponent,
     OverviewComponent,
     VersionListComponent,
-    TimelineComponent
+    TimelineComponent,
+    OptionsComponent
   ],
   imports: [
     BrowserModule,
@@ -95,7 +94,6 @@ import { TimelineComponent } from './redminer/timeline.component';
   providers: [
     RedmineInjectables,
     ProjectResolver,
-    VersionResolver,
   ],
   bootstrap: [AppComponent]
 })

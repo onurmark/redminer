@@ -1,13 +1,62 @@
-<mat-tab-group *ngIf="version">
+<mat-tab-group>
   <mat-tab label="Version">
     <div class="ab-tab">
-      <app-version-detail [version]="version"></app-version-detail>
+      <ng-template matTabContent>
+        <form [formGroup]="versionForm">
+          <mat-card>
+            <mat-card-content class="container">
+              <mat-form-field>
+                <input matInput
+                              formControlName="name"
+                              placeholder="Version name">
+              </mat-form-field>
+
+              <mat-form-field>
+                <textarea matInput
+                              formControlName="description"
+                              placeholder="Description"
+                              rows="5"></textarea>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-select
+                              formControlName="status"
+                              placeholder="status">
+                  <mat-option value="open">open</mat-option>
+                  <mat-option value="closed">closed</mat-option>
+                  <mat-option value="locked">locked</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input formControlName="wiki_page_title" matInput placeholder="WIKI pages">
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-select formControlName="sharing" placeholder="sharing">
+                  <mat-option value="none">none</mat-option>
+                  <mat-option value="descendants">하위프로젝트</mat-option>
+                  <mat-option value="hierachy">상위 및 하위 프로젝트</mat-option>
+                  <mat-option value="tree">최상위 및 모든 하위 프로젝트</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-raised-button color="primary"
+                                        [disabled]="versionForm.pristine"
+                                        (click)=onUpdate()>Update</button>
+            </mat-card-actions>
+          </mat-card>
+        </form>
+      </ng-template>
     </div>
   </mat-tab>
 
   <mat-tab label="Issue">
     <div class="ab-tab">
-      <app-issues [version]="version"></app-issues>
+      <ng-template matTabContent>
+        <app-issues [version]="version"></app-issues>
+      </ng-template>
     </div>
   </mat-tab>
   <mat-tab label="Build">

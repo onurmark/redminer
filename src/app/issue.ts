@@ -41,4 +41,17 @@ export class Issue {
   }
 }
 
+export class IssueStatus {
+  id: number;
+  name: string;
+  is_default: boolean;
+  is_closed: boolean;
 
+
+  constructor(obj?: any) {
+    this.id = obj && obj.id || null;
+    this.name = obj && obj.name || null;
+    this.is_default = obj && obj.is_default || null;
+    this.is_closed = obj && obj.is_closed || null;
+  }
+}

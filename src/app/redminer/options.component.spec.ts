@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VersionDetailComponent } from './version-detail.component';
+import { OptionsComponent } from './options.component';
 
-describe('VersionDetailComponent', () => {
-  let component: VersionDetailComponent;
-  let fixture: ComponentFixture<VersionDetailComponent>;
+describe('OptionsComponent', () => {
+  let component: OptionsComponent;
+  let fixture: ComponentFixture<OptionsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ VersionDetailComponent ]
+      declarations: [ OptionsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(VersionDetailComponent);
+    fixture = TestBed.createComponent(OptionsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

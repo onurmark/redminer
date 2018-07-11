@@ -1,6 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+
+import { RedmineService } from '../redmine.service';
+
 import { Version } from '../version';
 
 @Component({
@@ -8,29 +10,48 @@ import { Version } from '../version';
   templateUrl: './version.component.html',
   styleUrls: ['./version.component.css']
 })
-export class VersionComponent implements OnInit, OnDestroy {
-  version: Version;
-  subscription: Subscription;
+export class VersionComponent implements OnInit {
+  @Input() version: Version;
+  @Output() updated = new EventEmitter<object>();
+  versionForm: FormGroup;
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private redmineService: RedmineService,
   ) {
-    this.subscription = this.router.events.subscribe((e: any) => {
-      if (e instanceof NavigationEnd) {
-        this.initializeVersion();
-      }
-    })
+    this.versionForm = fb.group({
+      name: ['', Validators.required],
+      description: '',
+      status: 'open',
+      wiki_page_title: '',
+      sharing: 'none',
+    });
   }
 
   ngOnInit() {
   }
 
-  initializeVersion(): void {
-    this.version = this.route.snapshot.data['version'];
+  ngOnChanges() {
+    this.rebuildForm();
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+  rebuildForm() {
+    this.versionForm.reset({
+      name: this.version.name,
+      description: this.version.description,
+      status: this.version.status,
+      wiki_page_title: this.version.wiki_page_title,
+      sharing: this.version.sharing
+    });
+  }
+
+  onUpdate() {
+    this.redmineService.updateVersion(
+      this.version.id, this.versionForm.value).subscribe(
+        () => {
+          console.log(this.versionForm.value);
+          this.updated.emit(this.versionForm.value);
+        }
+    );
   }
 }

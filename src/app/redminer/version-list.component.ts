@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Pipe, PipeTransform } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
-import { Subscription } from 'rxjs';
+import { Subscription, Observable, of as ObservableOf } from 'rxjs';
+import { mergeMap, map, catchError } from 'rxjs/operators';
 
 import { MatDialog } from '@angular/material';
 
@@ -21,6 +22,7 @@ import { VersionCreateDialogComponent } from './version-create-dialog.component'
 export class VersionListComponent implements OnInit {
   project: Project;
   versions: Version[] = [];
+  selectedVersion: Version;
   subscription: Subscription;
 
   constructor(
@@ -41,7 +43,7 @@ export class VersionListComponent implements OnInit {
 
   initializeVersionList(): void {
     this.project = this.route.snapshot.data['project'];
-    console.log(this.project);
+    console.log('InitializeVersionList()' + this.project);
     this.redmineService.getProjectVersionList(this.project.id).subscribe(versions => {
       this.versions = versions;
     });
@@ -52,31 +54,48 @@ export class VersionListComponent implements OnInit {
       width: '500px',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('here');
-      if (!result) {
-        return;
-      }
-      const version: Version = new Version(result);
-      this.redmineService.createVersion(this.project.id, version).subscribe(result => {
+    dialogRef.afterClosed().pipe(
+      mergeMap(result => {
+        return this.redmineService.createVersion(this.project.id, new Version(result));
+      })
+    ).subscribe(
+      (result) => {
         this.versions.push(new Version(result.version));
-      });
-    });
-  }
-
-  onRemoveVersion(event: Event, version: Version): void {
-    event.preventDefault();
-    event.stopImmediatePropagation();
-
-    this.redmineService.deleteVersion(version).subscribe(result => {
-      console.log(result);
-      const index = this.versions.indexOf(version);
-      if (index !== -1) this.versions.splice(index, 1);
-    });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  onSelectVersion(version: Version): void {
+    this.selectedVersion = version;
+  }
+
+  onChangedVersion(e) {
+    this.selectedVersion.name = e.name;
+    this.selectedVersion.description = e.description;
+    this.selectedVersion.status = e.status;
+    this.selectedVersion.wiki_page_title = e.wiki_page_title;
+    this.selectedVersion.sharing = e.sharing;
+  }
+
+  getStatusIconString(version: Version): string {
+    let iconString = '';
+
+    if (version.status === 'open') {
+      iconString = 'play_arrow';
+    } else if (version.status === 'closed') {
+      iconString = 'stop';
+    } else if (version.status === 'locked') {
+      iconString = 'lock';
+    }
+
+    return iconString;
   }
 }
 
@@ -90,8 +109,8 @@ export class VersionFilterPipe implements PipeTransform {
       return versions;
     }
 
-    return versions.filter(version => 
-      version.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
+    return versions.filter(
+      version => version.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
     );
   }
 }

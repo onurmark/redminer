@@ -6,10 +6,11 @@ import { map } from 'rxjs/operators';
 
 import { Project } from './project';
 import { Version } from './version';
-import { Issue } from './issue';
+import { Issue, IssueStatus } from './issue';
 
 export const REDMINE_API_URL: string = 'http://192.168.218.65/redmine';
 export const REDMINE_API_KEY: string = '7d813688a0098b8a2822c4142cc72dc45c4270b5';
+
 /*
 export const REDMINE_API_URL: string = 'http://192.168.201.144/';
 export const REDMINE_API_KEY: string = '4ad769a919bbe21a4350bd248af0860e1e75aab0';
@@ -55,7 +56,8 @@ export class RedmineService {
           id: item.id,
           name: item.name,
           identifier: item.identifier,
-          description: item.description
+          description: item.description,
+          parent: item.parent
         });
       });
     }));
@@ -94,16 +96,9 @@ export class RedmineService {
     }}, httpOptions);
   }
 
-  updateVersion(id: number, version: Version): Observable<any> {
+  updateVersion(id: number, obj: object): Observable<any> {
     const url = `${this.apiUrl}/versions/${id}.json`;
-    return this.http.put(url, {version: {
-      name: version.name,
-      status: version.status,
-      sharing: version.sharing,
-      due_date: version.due_date,
-      description: version.description,
-      wiki_page_title: version.wiki_page_title
-    }}, httpOptions);
+    return this.http.put(url, {version: obj}, httpOptions);
   }
 
   deleteVersion(version: Version): Observable<any> {
@@ -129,5 +124,17 @@ export class RedmineService {
   updateIssue(issueId: number, data: object): Observable<any> {
     const queryUrl = `${this.apiUrl}/issues/${issueId}.json`;
     return this.http.put(queryUrl, {issue: data}, httpOptions);
+  }
+
+  getIssueStatuses(): Observable<IssueStatus[]> {
+    const queryUrl = `${this.apiUrl}/issue_statuses.json`;
+    return this.http.get(queryUrl, httpOptions).pipe(
+      map(response => {
+        console.log(response);
+        return response['issue_statuses'].map(item => {
+          return new IssueStatus(item);
+        })
+      })
+    );
   }
 }

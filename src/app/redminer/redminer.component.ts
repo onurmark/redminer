@@ -2,11 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
-import { mergeMap } from 'rxjs/operators';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { startWith, map, mergeMap } from 'rxjs/operators';
 
 import { RedmineService } from '../redmine.service';
 
 import { Project } from '../project';
+
+export interface ProjectGroup {
+  id: number;
+  name: string;
+  project: Project[];
+}
 
 @Component({
   selector: 'app-redminer',
@@ -14,8 +21,9 @@ import { Project } from '../project';
   styleUrls: ['./redminer.component.css']
 })
 export class RedminerComponent implements OnInit {
-  formGroup: FormGroup;
+  searchControl = new FormControl();
   projects: Project[] = [];
+  filteredProjects = new BehaviorSubject<Project[]>([]);
 
   constructor(
     private fb: FormBuilder,
@@ -23,21 +31,36 @@ export class RedminerComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    this.formGroup = fb.group({
-      'project': '',
-    });
-
-    this.redmineService.getProjectList().pipe(
-      mergeMap(projects => {
-        this.projects = projects;
-        return this.formGroup.controls['project'].valueChanges;
-      })
-    ).subscribe((project: Project) => {
-      this.router.navigate(['redminer/project', project.id]);
-    });
   }
 
   ngOnInit() {
+    this.searchControl.valueChanges.pipe(
+      startWith<string | Project>(''),
+      map(value => typeof value === 'string' ? value : value.name),
+      map(name => {
+        return name ? this._filter(name) : this.projects.slice()
+      })
+    ).subscribe(projects => {
+      this.filteredProjects.next(projects);
+    });
+
+    this.redmineService.getProjectList().subscribe(projects => {
+      this.projects = projects;
+      this.filteredProjects.next(projects);
+    });
+  }
+
+  onSelectedProject(project: Project): void {
+    this.router.navigate(['redminer/project', project.id]);
+  }
+
+  onClearSearch(): void {
+    this.searchControl.patchValue('');
+  }
+
+  private _filter(name: string): Project[] {
+    const filterValue = name.toLowerCase();
+    return this.projects.filter(project => project.name.toLowerCase().indexOf(filterValue) === 0);
   }
 }
 
