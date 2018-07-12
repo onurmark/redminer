@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import { RedmineService } from '../redmine.service';
 
@@ -18,6 +19,7 @@ export class VersionComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private redmineService: RedmineService,
+    private route: ActivatedRoute,
   ) {
     this.versionForm = fb.group({
       name: ['', Validators.required],

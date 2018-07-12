@@ -26,14 +26,13 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
-import { RedminerComponent } from './redminer/redminer.component';
 import { RedminerPopupComponent } from './redminer/redminer-popup.component';
 import { RedminerEventComponent } from './redminer/redminer-event.component';
 
 import { RedmineInjectables } from './redmine.injectable';
 import { VersionComponent } from './redminer/version.component';
 
-import { ProjectResolver } from './project.resolver';
+import { VersionResolver } from './version.resolver';
 import { IssuesComponent } from './redminer/issues.component';
 import { IssuesMoveDialogComponent } from './redminer/issues-move-dialog.component';
 import { VersionCreateDialogComponent } from './redminer/version-create-dialog.component';
@@ -41,11 +40,13 @@ import { OverviewComponent } from './redminer/overview.component';
 import { VersionListComponent, VersionFilterPipe } from './redminer/version-list.component';
 import { TimelineComponent } from './redminer/timeline.component';
 import { OptionsComponent } from './redminer/options.component';
+import { RedminerComponent } from './redminer/redminer.component';
+import { LayoutModule } from '@angular/cdk/layout';
+import { SettingsComponent } from './redminer/settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    RedminerComponent,
     VersionFilterPipe,
     RedminerPopupComponent,
     RedminerEventComponent,
@@ -56,7 +57,9 @@ import { OptionsComponent } from './redminer/options.component';
     OverviewComponent,
     VersionListComponent,
     TimelineComponent,
-    OptionsComponent
+    OptionsComponent,
+    RedminerComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -86,14 +89,16 @@ import { OptionsComponent } from './redminer/options.component';
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatDialogModule,
+    LayoutModule,
   ],
   entryComponents: [
     VersionCreateDialogComponent,
     IssuesMoveDialogComponent,
+    SettingsComponent,
   ],
   providers: [
     RedmineInjectables,
-    ProjectResolver,
+    VersionResolver,
   ],
   bootstrap: [AppComponent]
 })

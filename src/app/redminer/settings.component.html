@@ -1,0 +1,20 @@
+<mat-dialog-content>
+  <h1>Settings</h1>
+
+  <h2>Redmine</h2>
+  <form #f [formGroup]="settingsForm" class="container">
+    <mat-form-field>
+      <input formControlName="apiUrl" matInput placeholder="API URL">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input formControlName="apiKey"
+        matInput placeholder="API Key">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button color="primary">Test</button>
+  <button mat-raised-button color="primary"
+    (click)="onSave()">Save</button>
+</mat-dialog-actions>

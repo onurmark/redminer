@@ -57,11 +57,13 @@ export class IssuesComponent implements AfterViewInit, OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    console.log('ngOnInit()');
     this.paginator.pageIndex = 0;
     this.change.emit();
   }
 
   onChangeIssueStatus(status): void {
+    console.log('ngOnChanges()');
     this.paginator.pageIndex = 0;
     this.issueStatus = status;
     this.change.emit();

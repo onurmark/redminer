@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { Pipe, PipeTransform } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
@@ -19,10 +19,9 @@ import { VersionCreateDialogComponent } from './version-create-dialog.component'
   templateUrl: './version-list.component.html',
   styleUrls: ['./version-list.component.css']
 })
-export class VersionListComponent implements OnInit {
-  project: Project;
+export class VersionListComponent implements OnInit, OnChanges {
+  @Input() project: Project;
   versions: Version[] = [];
-  selectedVersion: Version;
   subscription: Subscription;
 
   constructor(
@@ -31,19 +30,16 @@ export class VersionListComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    this.subscription = this.router.events.subscribe((e: any) => {
-      if (e instanceof NavigationEnd) {
-        this.initializeVersionList();
-      }
-    })
   }
 
   ngOnInit() {
   }
 
+  ngOnChanges() {
+    this.initializeVersionList();
+  }
+
   initializeVersionList(): void {
-    this.project = this.route.snapshot.data['project'];
-    console.log('InitializeVersionList()' + this.project);
     this.redmineService.getProjectVersionList(this.project.id).subscribe(versions => {
       this.versions = versions;
     });
@@ -66,22 +62,6 @@ export class VersionListComponent implements OnInit {
         console.log(error);
       }
     );
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
-  onSelectVersion(version: Version): void {
-    this.selectedVersion = version;
-  }
-
-  onChangedVersion(e) {
-    this.selectedVersion.name = e.name;
-    this.selectedVersion.description = e.description;
-    this.selectedVersion.status = e.status;
-    this.selectedVersion.wiki_page_title = e.wiki_page_title;
-    this.selectedVersion.sharing = e.sharing;
   }
 
   getStatusIconString(version: Version): string {

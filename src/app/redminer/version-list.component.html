@@ -1,38 +1,24 @@
-<div>
-</div>
-<div>
-  <mat-sidenav-container class="container" autosize>
-    <mat-sidenav mode="side" opened class="sidenav"
-      [fixedInViewport]="false"
-      [fixedTopGap]="0"
-      [fixedBottomGap]="0">
-      <button mat-raised-button color="primary"
-        class="sidenav-button"
-        (click)="onCreateNewVersion()">Create New Version</button>
-        <mat-form-field>
-          <input #filter matInput
-            placeholder="Search version">
-          <mat-icon matSuffix (click)="filter.value=''">
-            clear
-          </mat-icon>
-        </mat-form-field>
-      <mat-nav-list>
-        <mat-list-item
-          *ngFor="let version of versions | versionFilter:filter.value"
-          [ngClass]="selectedVersion === version ? 'active' : ''"
-          (click)="onSelectVersion(version)">
-          <span matLine>{{ version.name }}</span>
-          <mat-icon>
-            {{ getStatusIconString(version) }}
-          </mat-icon>
-        </mat-list-item>
-      </mat-nav-list>
-    </mat-sidenav>
-    <mat-sidenav-content class="sidenav-content">
-      <app-version *ngIf="selectedVersion"
-        [version]="selectedVersion"
-        (updated)="onChangedVersion($event)"
-        ></app-version>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</div>
+<button mat-raised-button color="primary"
+  class="sidenav-button"
+  (click)="onCreateNewVersion()">
+  Create New Version
+</button>
+<mat-form-field>
+  <input #filter matInput
+    placeholder="Search version">
+  <mat-icon matSuffix (click)="filter.value=''">
+    clear
+  </mat-icon>
+</mat-form-field>
+<mat-nav-list>
+  <mat-list-item
+    *ngFor="let version of versions | versionFilter:filter.value"
+    [ngClass]="selectedVersion === version ? 'active' : ''"
+    routerLink="version/{{version.id}}"
+    routerLinkActive="active">
+    <span matLine>{{ version.name }}</span>
+    <mat-icon>
+      {{ getStatusIconString(version) }}
+    </mat-icon>
+  </mat-list-item>
+</mat-nav-list>

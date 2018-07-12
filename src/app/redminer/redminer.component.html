@@ -1,27 +1,73 @@
-<ng-container>
-  <mat-toolbar color="primary" class="ab-header">
-    <a mat-button href="#">Redminer</a>
-    <a mat-button routerLink="timeline">Timeline</a>
-
-    <span class="ab-spacer"></span>
-
-    <form>
-      <mat-form-field class="ab-search">
-        <label for="project">Project: </label>
-        <input matInput [formControl]="searchControl" [matAutocomplete]="auto">
-        <mat-icon matSuffix (click)="onClearSearch()">clear</mat-icon>
-        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
-          (optionSelected)="onSelectedProject($event.option.value)">
-          <mat-option *ngFor="let project of filteredProjects | async" [value]="project">
-            {{ project }}
-          </mat-option>
-        </mat-autocomplete>
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport="false"
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="!(isHandset$ | async)" autosize>
+    <mat-toolbar color="primary"></mat-toolbar>
+    <div class="sidenav-contents">
+      <button mat-raised-button color="primary"
+        class="fullwidth"
+        (click)="onCreateNewVersion()">
+        Create New Version
+      </button>
+      <mat-form-field class="fullwidth">
+        <input #filter matInput
+          placeholder="Search version">
+        <mat-icon matSuffix (click)="filter.value=''">
+          clear
+        </mat-icon>
       </mat-form-field>
-    </form>
-    <mat-icon>settings</mat-icon>
-  </mat-toolbar>
-  <main role="main" class="ab-sidebar-container" autosize>
-    <router-outlet></router-outlet>
-  </main>
-  <mat-toolbar class="ab-footer">Footer</mat-toolbar>
-</ng-container>
+      <mat-nav-list>
+        <mat-list-item
+          *ngFor="let version of versions | versionFilter:filter.value"
+          [ngClass]="selectedVersion === version ? 'active' : ''"
+          (click)="onSelectedVersion(version);">
+          <span matLine>{{ version.name }}</span>
+          <mat-icon>
+            {{ getStatusIconString(version) }}
+          </mat-icon>
+        </mat-list-item>
+      </mat-nav-list>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span>Redminer</span>
+      <mat-nav-list>
+        <a mat-list-item routerLink="/timeline">Timeline</a>
+      </mat-nav-list>
+      <span class="spacer"></span>
+      <form>
+        <mat-form-field>
+          <input matInput
+            [formControl]="searchControl"
+            [matAutocomplete]="auto"
+            placeholder="Projects: ">
+          <mat-icon matSuffix (click)="onClearSearch()">clear</mat-icon>
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+            (optionSelected)="onSelectedProject($event.option.value)">
+            <mat-option *ngFor="let project of filteredProjects | async" [value]="project">
+              {{ project }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
+    </mat-toolbar>
+    <!-- Add Content Here -->
+    <app-version
+      *ngIf="selectedVersion"
+      [version]="selectedVersion"
+      (updated)="onUpdatedVersion($event)"></app-version>
+  </mat-sidenav-content>
+</mat-sidenav-container>
