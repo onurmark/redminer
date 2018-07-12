@@ -1,6 +1,6 @@
 <mat-dialog-content>
   <h1>Create New Version</h1>
-  <form #f [formGroup]="versionForm" class="container">
+  <form #f="ngForm" [formGroup]="versionForm" class="container">
     <mat-form-field>
       <input formControlName="name"
         matInput placeholder="Name">
@@ -36,9 +36,8 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button
-    mat-dialog-close
     (click)="onCancel()">Cancel</button>
   <button mat-raised-button color="primary"
-    [disabled]="f.pristine"
+    [disabled]="f.invalid"
     (click)="onCreate()">Create</button>
 </mat-dialog-actions>

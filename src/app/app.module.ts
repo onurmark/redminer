@@ -23,13 +23,16 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { RedminerPopupComponent } from './redminer/redminer-popup.component';
 import { RedminerEventComponent } from './redminer/redminer-event.component';
 
-import { RedmineInjectables } from './redmine.injectable';
+import { SettingsService } from './settings.service';
+import { RedmineService } from './redmine.service';
 import { VersionComponent } from './redminer/version.component';
 
 import { VersionResolver } from './version.resolver';
@@ -89,6 +92,8 @@ import { SettingsComponent } from './redminer/settings.component';
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     LayoutModule,
   ],
   entryComponents: [
@@ -97,7 +102,8 @@ import { SettingsComponent } from './redminer/settings.component';
     SettingsComponent,
   ],
   providers: [
-    RedmineInjectables,
+    RedmineService,
+    SettingsService,
     VersionResolver,
   ],
   bootstrap: [AppComponent]

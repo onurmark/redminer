@@ -2,7 +2,7 @@
   <h1>Settings</h1>
 
   <h2>Redmine</h2>
-  <form #f [formGroup]="settingsForm" class="container">
+  <form #f="ngForm" [formGroup]="settingsForm" class="container">
     <mat-form-field>
       <input formControlName="apiUrl" matInput placeholder="API URL">
     </mat-form-field>
@@ -16,5 +16,6 @@
 <mat-dialog-actions>
   <button mat-raised-button color="primary">Test</button>
   <button mat-raised-button color="primary"
+    [disabled]="f.invalid"
     (click)="onSave()">Save</button>
 </mat-dialog-actions>

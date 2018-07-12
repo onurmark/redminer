@@ -29,6 +29,12 @@
               </mat-form-field>
 
               <mat-form-field>
+                <input formControlName="due_date" matInput [matDatepicker]="picker" placeholder="Choose a date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field>
                 <input formControlName="wiki_page_title" matInput placeholder="WIKI pages">
               </mat-form-field>
 
@@ -59,11 +65,9 @@
       </ng-template>
     </div>
   </mat-tab>
-  <mat-tab label="Build">
+  <mat-tab label="Timeline">
     <div class="ab-tab">
-      <!--
-      <app-build></app-build>
-      -->
+      <app-timeline [version]="version"></app-timeline>
     </div>
   </mat-tab>
 </mat-tab-group>

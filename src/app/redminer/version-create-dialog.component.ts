@@ -36,6 +36,6 @@ export class VersionCreateDialogComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.dialogRef.close();
+    this.dialogRef.close('cancel');
   }
 }

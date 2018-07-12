@@ -7,6 +7,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { startWith, map, mergeMap } from 'rxjs/operators';
 
 import { RedmineService } from '../redmine.service';
+import { SettingsService } from '../settings.service';
 
 import { Project } from '../project';
 import { Version } from '../version';
@@ -34,19 +35,25 @@ export class RedminerComponent {
   constructor(
     private fb: FormBuilder,
     private redmineService: RedmineService,
+    private settingsService: SettingsService,
     private dialog: MatDialog,
     private breakpointObserver: BreakpointObserver,
   ) {
-    let settings = localStorage.redminer;
-    if (!settings) {
-      this.openSettingDialog();
-    }
   }
 
-  openSettingDialog(): void {
+  openSettingsDialog(): void {
     const dialogRef = this.dialog.open(SettingsComponent, {
       width: '500px',
     });
+
+    dialogRef.afterClosed().pipe(
+      mergeMap(result => {
+        return this.redmineService.getProjectList();
+      })
+    ).subscribe(projects => {
+      this.projects = projects;
+      this.filteredProjects.next(projects);
+    })
   }
 
   ngOnInit() {
@@ -60,6 +67,11 @@ export class RedminerComponent {
       this.filteredProjects.next(projects);
     });
 
+    if (!this.settingsService.isSettingsDone()) {
+      this.openSettingsDialog();
+      return;
+    }
+
     this.redmineService.getProjectList().subscribe(projects => {
       this.projects = projects;
       this.filteredProjects.next(projects);
@@ -68,13 +80,10 @@ export class RedminerComponent {
 
   onSelectedProject(project: Project): void {
     this.selectedProject = project;
+    this.selectedVersion = null;
     this.redmineService.getProjectVersionList(project.id).subscribe(versions => {
       this.versions = versions;
     });
-  }
-
-  onClearSearch(): void {
-    this.searchControl.patchValue('');
   }
 
   private _filter(name: string): Project[] {

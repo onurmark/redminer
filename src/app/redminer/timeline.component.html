@@ -1,8 +1,13 @@
-<p>
-  timeline works!
-  wefijowefojwefio
-</p>
-<p>
-  timeline works!
-  wefijowefojwefio
-</p>
+<mat-card
+  *ngFor="let v of versions"
+  [ngClass]="version.id === v.id ? 'card-sel' : 'card'">
+  <mat-card-title>{{ v.name }}</mat-card-title>
+  <mat-card-subtitle>
+    {{ v.due_date }}
+  </mat-card-subtitle>
+  <mat-card-content>
+    <p>
+    {{ v.description }}
+    </p>
+  </mat-card-content>
+</mat-card>
