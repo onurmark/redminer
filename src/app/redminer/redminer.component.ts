@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
@@ -48,6 +49,7 @@ export class RedminerComponent {
 
     dialogRef.afterClosed().pipe(
       mergeMap(result => {
+        this.redmineService.refreshKey();
         return this.redmineService.getProjectList();
       })
     ).subscribe(projects => {
@@ -88,7 +90,11 @@ export class RedminerComponent {
 
   private _filter(name: string): Project[] {
     const filterValue = name.toLowerCase();
-    return this.projects.filter(project => project.name.toLowerCase().indexOf(filterValue) === 0);
+    return this.projects.filter(project => project.name.toLowerCase().indexOf(filterValue) > -1);
+  }
+
+  onClearSearchProject(): void {
+    this.searchControl.setValue('');
   }
 
   onSelectedVersion(version: Version): void {
@@ -132,7 +138,47 @@ export class RedminerComponent {
     this.selectedVersion.name = event.name;
     this.selectedVersion.description = event.description;
     this.selectedVersion.status = event.status;
+    this.selectedVersion.due_date = event.due_date;
     this.selectedVersion.wiki_page_title = event.wiki_page_title;
     this.selectedVersion.sharing = event.sharing;
+  }
+}
+
+@Pipe({
+  name: 'versionNameFilter',
+  pure: false
+})
+export class VersionNameFilterPipe implements PipeTransform {
+  transform(versions: Version[], filter: String): any {
+    if (!versions || !filter) {
+      return versions;
+    }
+
+    return versions.filter(
+      version => version.name.toLowerCase().indexOf(filter.toLowerCase()) > -1
+    );
+  }
+}
+
+@Pipe({
+  name: 'versionStatusFilter',
+  pure: false
+})
+export class VersionStatusFilterPipe implements PipeTransform {
+  transform(versions: Version[], filter: String[]): Version[] {
+    if (!versions || !filter) {
+      return versions;
+    }
+
+    return versions.filter(
+      version => {
+        for (let i = 0; i < filter.length; i++) {
+          if (version.status === filter[i]) {
+            return true;
+          }
+        }
+        return false;
+      }
+    );
   }
 }

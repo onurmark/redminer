@@ -88,8 +88,11 @@ export class VersionComponent implements OnInit {
   onUpdate() {
     let value = this.versionForm.value;
 
-    value['due_date'] =
-      new Date(this.versionForm.controls['due_date'].value).toISOString().slice(0, 10);
+    if (value['due_date']) {
+      console.log('date: ' + value['due_date']);
+      value['due_date'] =
+        new Date(this.versionForm.controls['due_date'].value).toISOString().slice(0, 10);
+    }
 
     this.redmineService.updateVersion(
       this.version.id, value).subscribe(

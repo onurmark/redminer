@@ -25,6 +25,7 @@ export class RedmineService {
     private http: HttpClient,
     private settingsService: SettingsService,
   ) {
+    this.refreshKey();
   }
 
   refreshKey(): void {

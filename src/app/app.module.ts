@@ -16,7 +16,10 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -40,17 +43,15 @@ import { IssuesComponent } from './redminer/issues.component';
 import { IssuesMoveDialogComponent } from './redminer/issues-move-dialog.component';
 import { VersionCreateDialogComponent } from './redminer/version-create-dialog.component';
 import { OverviewComponent } from './redminer/overview.component';
-import { VersionListComponent, VersionFilterPipe } from './redminer/version-list.component';
 import { TimelineComponent } from './redminer/timeline.component';
 import { OptionsComponent } from './redminer/options.component';
-import { RedminerComponent } from './redminer/redminer.component';
+import { RedminerComponent, VersionNameFilterPipe, VersionStatusFilterPipe } from './redminer/redminer.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { SettingsComponent } from './redminer/settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    VersionFilterPipe,
     RedminerPopupComponent,
     RedminerEventComponent,
     VersionComponent,
@@ -58,11 +59,12 @@ import { SettingsComponent } from './redminer/settings.component';
     IssuesMoveDialogComponent,
     VersionCreateDialogComponent,
     OverviewComponent,
-    VersionListComponent,
     TimelineComponent,
     OptionsComponent,
     RedminerComponent,
-    SettingsComponent
+    VersionNameFilterPipe,
+    VersionStatusFilterPipe,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,7 +87,10 @@ import { SettingsComponent } from './redminer/settings.component';
     MatSidenavModule,
     MatListModule,
     MatExpansionModule,
+    MatChipsModule,
     MatIconModule,
+    MatDividerModule,
+    MatTooltipModule,
     MatCardModule,
     MatSortModule,
     MatTableModule,

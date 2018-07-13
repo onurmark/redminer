@@ -30,6 +30,8 @@ export class IssuesMoveDialogComponent implements OnInit {
     this.redmineService.getProjectVersionList(this.version.project.id).subscribe(versions => {
       this.versions = versions.filter(version => {
         return version.id !== this.version.id;
+      }).filter(version => {
+        return version.status === 'open';
       });
     });
   }

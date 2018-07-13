@@ -6,10 +6,14 @@
     [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="!(isHandset$ | async)" autosize>
+    <mat-toolbar color="primary">
+    </mat-toolbar>
     <div class="sidenav-contents">
       <mat-form-field class="fullwidth">
-        <input [formControl]="searchControl" #searchProject matInput placeholder="Search Project">
-        <mat-icon matSuffix (click)="searchProject.value=''">
+        <mat-label></mat-label>
+        <input [formControl]="searchControl" matInput placeholder="Search project">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-icon matSuffix (click)="onClearSearchProject()">
           clear
         </mat-icon>
       </mat-form-field>
@@ -22,25 +26,47 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <ng-template matExpansionPanelContent>
-            <mat-form-field class="fullwidth">
-              <input #filter matInput placeholder="Search version">
-              <mat-icon matSuffix (click)="filter.value=''">
-                clear
-              </mat-icon>
-            </mat-form-field>
-            <mat-nav-list>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon matLine>filter_list</mat-icon>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-list>
+                <mat-list-item>
+                  <mat-form-field class="fullwidth">
+                    <mat-select #filterStatus placeholder="Filters"
+                      [value]="['open']" multiple>
+                      <mat-option value="open">open</mat-option>
+                      <mat-option value="closed">closed</mat-option>
+                      <mat-option value="locked">locked</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-list-item>
+                <mat-list-item>
+                  <mat-form-field class="fullwidth">
+                    <mat-label></mat-label>
+                    <input #filter matInput placeholder="Search version">
+                    <mat-icon matPrefix>search</mat-icon>
+                    <mat-icon matSuffix (click)="filter.value=''">
+                      clear
+                    </mat-icon>
+                  </mat-form-field>
+                </mat-list-item>
+              </mat-list>
+            </mat-expansion-panel>
+            <mat-list>
               <mat-list-item (click)="onCreateNewVersion()">
-                <span matLine>
-                  Create new version
-                </span>
-                <mat-icon>add</mat-icon>
+                <a mat-raised-button matLine color="primary">Create new version</a>
               </mat-list-item>
+            </mat-list>
+            <mat-nav-list>
               <mat-list-item
-                 *ngFor="let version of versions | versionFilter:filter.value"
+                 *ngFor="let version of versions | versionNameFilter:filter.value | versionStatusFilter: filterStatus.value"
                  [ngClass]="selectedVersion === version ? 'active' : ''"
                  (click)="onSelectedVersion(version);">
                 <span matLine>{{ version.name }}</span>
-                <mat-icon matSuffix>
+                <mat-icon matListIcon>
                   {{ getStatusIconString(version) }}
                 </mat-icon>
               </mat-list-item>

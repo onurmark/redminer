@@ -29,7 +29,7 @@
               </mat-form-field>
 
               <mat-form-field>
-                <input formControlName="due_date" matInput [matDatepicker]="picker" placeholder="Choose a date">
+                <input formControlName="due_date" matInput [matDatepicker]="picker" placeholder="Choose a date" readonly>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
@@ -65,9 +65,18 @@
       </ng-template>
     </div>
   </mat-tab>
+
   <mat-tab label="Timeline">
     <div class="ab-tab">
       <app-timeline [version]="version"></app-timeline>
     </div>
   </mat-tab>
+
+  <!--
+  <mat-tab label="Files">
+    <div class="ab-tab">
+      <app-files [version]="version"></app-files>
+    </div>
+  </mat-tab>
+  -->
 </mat-tab-group>
