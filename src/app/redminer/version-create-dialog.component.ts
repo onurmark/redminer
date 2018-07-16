@@ -23,6 +23,7 @@ export class VersionCreateDialogComponent implements OnInit {
       name: ['', Validators.required],
       description: '',
       status: 'open',
+      due_date: '',
       wiki_page_title: '',
       sharing: 'none',
     });
@@ -32,7 +33,15 @@ export class VersionCreateDialogComponent implements OnInit {
   }
 
   onCreate(): void {
-    this.dialogRef.close(this.versionForm.value);
+    let value = this.versionForm.value;
+
+    if (value['due_date']) {
+      console.log('date: ' + value['due_date']);
+      value['due_date'] =
+        new Date(this.versionForm.controls['due_date'].value).toISOString().slice(0, 10);
+    }
+
+    this.dialogRef.close(value);
   }
 
   onCancel(): void {
