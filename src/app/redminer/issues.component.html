@@ -44,7 +44,9 @@
 
     <ng-container matColumnDef="id">
       <th mat-header-cell mat-sort-header *matHeaderCellDef>ID.</th>
-      <td mat-cell *matCellDef="let issue">{{ issue.id }}</td>
+      <td mat-cell *matCellDef="let issue">
+        <a target="_blank" rel="noopener noreferrer" href="{{ getIssueUrl(issue.id) }}">{{ issue.id }}</a>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="status">

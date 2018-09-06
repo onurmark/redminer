@@ -107,6 +107,10 @@ export class IssuesComponent implements AfterViewInit, OnInit, OnChanges {
     this.selection.clear();
   }
 
+  getIssueUrl(id: number) {
+    return this.redmineService.getApiUrl() + '/issues/' + id;
+  }
+
   onMoveVersionBtn(): void {
     const dialogRef = this.dialog.open(IssuesMoveDialogComponent, {
       width: '500px',
