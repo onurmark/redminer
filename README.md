@@ -1,6 +1,11 @@
 # Redminer
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
+![redminer-extension](https://user-images.githubusercontent.com/3131463/45194304-689c3280-b28d-11e8-8bcc-b4ca8e9d3fae.gif)
+
+## Clone and Initialize
+
+Run `npm install` for prepare for build.
 
 ## Development server
 
@@ -10,9 +15,9 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+## Build for Google chrome plugin
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `./node_modules/gulp/bin/gulp.js` for build Google chrome extension. The build artifacts will be stored in the `dist/redminer` directory.
 
 ## Running unit tests
 
