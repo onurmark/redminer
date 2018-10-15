@@ -48,6 +48,11 @@
               </mat-form-field>
             </mat-card-content>
             <mat-card-actions>
+              <a mat-button mat-raised-button target="_blank"
+                                              rel="noopener noreferrer"
+                                              href="{{ getVersionUrl(version.id) }}">
+                View in redmine</a>
+
               <button mat-raised-button color="primary"
                                         [disabled]="versionForm.pristine"
                                         (click)=onUpdate()>Update</button>

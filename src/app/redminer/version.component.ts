@@ -102,5 +102,9 @@ export class VersionComponent implements OnInit {
         }
     );
   }
+
+  getVersionUrl(id: number) {
+    return this.redmineService.getApiUrl() + '/versions/' + id;
+  }
 }
 
