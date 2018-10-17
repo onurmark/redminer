@@ -26,7 +26,7 @@ export class IssuesComponent implements AfterViewInit, OnInit, OnChanges {
   @Input() version: Version;
 
   issueDataSource: IssueDataSource;
-  displayedColumns: string[] = ['select', 'id', 'status', 'subject', 'author.name', 'done_ratio'];
+  displayedColumns: string[] = ['select', 'id', 'status', 'subject', 'assigned_to.name', 'done_ratio'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
